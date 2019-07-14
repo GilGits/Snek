@@ -6,13 +6,6 @@ Snake::Snake()
 	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth/2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2) / Graphics::cellDim) * Graphics::cellDim)));
 	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim) / Graphics::cellDim) * Graphics::cellDim)));
 	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim*2) / Graphics::cellDim) * Graphics::cellDim)));
-	/*body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim*3) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 4) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 5) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 6) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 7) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 8) / Graphics::cellDim) * Graphics::cellDim)));
-	body.push_back(Location(static_cast<int>(ceil((Graphics::ScreenWidth / 2) / Graphics::cellDim) * Graphics::cellDim), static_cast<int>(ceil((Graphics::ScreenHeight / 2 + Graphics::cellDim * 9) / Graphics::cellDim) * Graphics::cellDim)));*/
 }
 
 void Snake::getInput(const Keyboard& kbd)
@@ -78,10 +71,38 @@ bool Snake::move()
 
 void Snake::draw(Graphics& gfx)
 {
+	//Draw head
 	gfx.DrawRectDim(body[0].getX(), body[0].getY(), Graphics::cellDim, Graphics::cellDim, Color{ 2, 73, 4 });
 
+	//Draw eyes on head
+	int eyesDim = static_cast<int>(static_cast<float>(4) / 15 * Graphics::cellDim); // 8/30 is the proportion of eyesDim to cellDim
+	int eyesDistance = static_cast<int>(static_cast<float>(1) / 6 * Graphics::cellDim); // 5/30 is the proportion of eyesDistance to cellDim
+
+	if (direction == up)
+	{
+		gfx.DrawRectDim(body[0].getX() + eyesDistance, body[0].getY() + 1, eyesDim, eyesDim, Color{ 0, 15, 0 });
+		gfx.DrawRectDim(body[0].getX() + Graphics::cellDim - (eyesDim + eyesDistance), body[0].getY() + 1, eyesDim, eyesDim, Color{ 0, 15, 0 });
+	}
+	else if (direction == left)
+	{
+		gfx.DrawRectDim(body[0].getX() + 1, body[0].getY() + eyesDistance, eyesDim, eyesDim, Color{ 0, 15, 0 });
+		gfx.DrawRectDim(body[0].getX() + 1, body[0].getY() + Graphics::cellDim - (eyesDim + eyesDistance), eyesDim, eyesDim, Color{ 0, 15, 0 });
+	}
+	else if (direction == down)
+	{
+		gfx.DrawRectDim(body[0].getX() + eyesDistance, body[0].getY() + Graphics::cellDim - (eyesDim + 1), eyesDim, eyesDim, Color{ 0, 15, 0 });
+		gfx.DrawRectDim(body[0].getX() + Graphics::cellDim - (eyesDim + eyesDistance), body[0].getY() + Graphics::cellDim - (eyesDim + 1), eyesDim, eyesDim, Color{ 0, 15, 0 });
+	}
+	else if (direction == right)
+	{
+		gfx.DrawRectDim(body[0].getX() + Graphics::cellDim - (eyesDim + 1), body[0].getY() + eyesDistance, eyesDim, eyesDim, Color{ 0, 15, 0 });
+		gfx.DrawRectDim(body[0].getX() + Graphics::cellDim - (eyesDim + 1), body[0].getY() + Graphics::cellDim - (eyesDim + eyesDistance), eyesDim, eyesDim, Color{ 0, 15, 0 });
+	}
+
+	//Draw rest of the body
 	for (unsigned int i = 1; i < body.size(); i++)
 	{
+		//Pattern of colors
 		switch (i % 5)
 		{
 		case 0:
@@ -101,7 +122,10 @@ void Snake::draw(Graphics& gfx)
 			break;
 		}
 
-		gfx.DrawRectDim(body[i].getX(), body[i].getY(), Graphics::cellDim, Graphics::cellDim, color);
+		if(eatenBody == 0 || eatenBody != i)
+			gfx.DrawRectDim(body[i].getX(), body[i].getY(), Graphics::cellDim, Graphics::cellDim, color);
+		else
+			gfx.DrawRectDim(body[i].getX(), body[i].getY(), Graphics::cellDim, Graphics::cellDim, Color(60, 0, 90));
 	}
 }
 
@@ -129,32 +153,13 @@ bool Snake::testCollision(Location location)
 
 bool Snake::hasFuckedUp()
 {
-	// quando si perdeva ai bordi
-	/*if (direction == up)
-	{
-		if (body[0].getY() < Graphics::cellDim)
-			return true;
-	}
-	if (direction == left)
-	{
-		if (body[0].getX() < Graphics::cellDim)
-			return true;
-	}
-	if (direction == down)
-	{
-		if (body[0].getY() > Graphics::ScreenHeight - Graphics::cellDim - 1)
-			return true;
-	}
-	if (direction == right)
-	{
-		if (body[0].getX() > Graphics::ScreenWidth - Graphics::cellDim - 1)
-			return true;
-	}*/
-
 	for (size_t i = body.size() - 2; i > 0; i--)
 	{
 		if (testCollision(body[i]))
+		{
+			eatenBody = static_cast<int>(i);
 			return true;
+		}
 	}
 
 	return false;

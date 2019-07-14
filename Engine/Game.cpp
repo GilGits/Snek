@@ -34,6 +34,7 @@ Game::Game( MainWindow& wnd )
 	}
 	catch (const SoundSystem::FileException& e)
 	{
+		(void)e; //gets rid of unreferenced local variable warning
 		title = Sound();
 	}
 
@@ -43,6 +44,7 @@ Game::Game( MainWindow& wnd )
 	}
 	catch (const SoundSystem::FileException& e)
 	{
+		(void)e; //gets rid of unreferenced local variable warning
 		gameover = Sound();
 	}
 
@@ -124,11 +126,11 @@ void Game::ComposeFrame()
 
 		if (isGameOver)
 		{
-			SpriteCodex::DrawGameOver(385, 260, gfx);
+			SpriteCodex::DrawGameOver(Graphics::ScreenWidth / 2 - Graphics::ScreenWidth / 18, Graphics::ScreenHeight / 2 - Graphics::ScreenHeight * 2 / 15, gfx); // 1/18 == 50/900 and 2/15 == 80/600
 		}
 	}
 	else
 	{
-		SpriteCodex::DrawTitle(337, 205, gfx);
+		SpriteCodex::DrawTitle(Graphics::ScreenWidth / 2 - Graphics::ScreenWidth / 10, Graphics::ScreenHeight / 2 - Graphics::ScreenHeight * 19 / 120, gfx); // 1/10 == 90/900 and 19/120 == 95/600
 	}
 }

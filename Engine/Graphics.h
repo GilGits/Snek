@@ -76,8 +76,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			pSamplerState;
 	D3D11_MAPPED_SUBRESOURCE							mappedSysBufferTexture;
 	Color*                                              pSysBuffer = nullptr;
+	static constexpr int MaxScreenWidth = 900;
+	static constexpr int MaxScreenHeight = 600;
 public:
-	static constexpr int ScreenWidth = 900;
-	static constexpr int ScreenHeight = 600;
 	static constexpr int cellDim = 30;
+	static constexpr int ScreenWidth = MaxScreenWidth - (MaxScreenWidth % cellDim);
+	static constexpr int ScreenHeight = MaxScreenHeight - (MaxScreenHeight % cellDim);;
 };

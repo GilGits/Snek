@@ -15,7 +15,7 @@ private:
 	Direction direction = up;
 	Color color = Colors::Green;
 	bool hasChosen = false;
-
+	int eatenBody = 0;
 	bool testCollision(Location location);
 	bool hasFuckedUp();
 
