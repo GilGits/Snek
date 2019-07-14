@@ -19,5 +19,5 @@ public:
 	void setPosition();
 	void draw(Graphics& gfx);
 
-	Location Food::getLocation();
+	Location Food::getLocation() const;
 };

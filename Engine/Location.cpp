@@ -12,12 +12,12 @@ Location::Location(int x, int y)
 {
 }
 
-int Location::getX()
+int Location::getX() const
 {
 	return x;
 }
 
-int Location::getY()
+int Location::getY() const
 {
 	return y;
 }

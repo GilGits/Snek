@@ -50,7 +50,7 @@ void Food::draw(Graphics& gfx)
 	}
 }
 
-Location Food::getLocation()
+Location Food::getLocation() const
 {
 	return this->location;
 }

@@ -24,8 +24,29 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	rng(rd()),
+	yay({ L"coin.wav" }, true)
 {
+	try
+	{
+		title = Sound(L"title.wav");
+	}
+	catch (const SoundSystem::FileException& e)
+	{
+		title = Sound();
+	}
+
+	try
+	{
+		gameover = Sound(L"gameoy.wav");
+	}
+	catch (const SoundSystem::FileException& e)
+	{
+		gameover = Sound();
+	}
+
+	title.Play();
 }
 
 void Game::Go()
@@ -43,6 +64,7 @@ void Game::UpdateModel()
 		while (!wnd.kbd.KeyIsEmpty()) //con 'if' sembra funzionare allo stesso identico modo
 		{
 			const Keyboard::Event e = wnd.kbd.ReadKey();
+
 			if (e.IsRelease() && (e.GetCode() == VK_SPACE || e.GetCode() == 'P'))
 			{
 				isPaused = !isPaused;
@@ -58,6 +80,7 @@ void Game::UpdateModel()
 				if (snake.hasEaten(food))
 				{
 					snake.draw(gfx); //altrimenti se dopo aver mangiato fuckdappa, non si vede che ha mangiato (quindi neanche che fuckdappa)
+					yay.Play(rng);
 
 					do
 					{
@@ -66,8 +89,11 @@ void Game::UpdateModel()
 					while (snake.isOverlapping(food.getLocation()));
 				}
 				//else snake.move(); // GOD MODE
-				else if (!snake.move()) 
+				else if (!snake.move())
+				{
 					isGameOver = true;
+					gameover.Play();
+				}
 			}
 
 			moveRateCounter++;
@@ -97,8 +123,12 @@ void Game::ComposeFrame()
 		food.draw(gfx);
 
 		if (isGameOver)
+		{
 			SpriteCodex::DrawGameOver(385, 260, gfx);
+		}
 	}
 	else
+	{
 		SpriteCodex::DrawTitle(337, 205, gfx);
+	}
 }
