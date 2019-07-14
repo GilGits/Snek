@@ -88,13 +88,13 @@ void Snake::draw(Graphics& gfx)
 			color = Color{ 0, 255, 0};
 			break;
 		case 1:
-			color = Color{ 20, 170, 20};
+			color = Color{ 20, 180, 30};
 			break;
 		case 2:
 			color = Color{ 10, 205, 0 };
 			break;
 		case 3:
-			color = Color{ 40, 155, 0 };
+			color = Color{ 50, 160, 0 };
 			break;
 		case 4:
 			color = Color{ 0, 225, 40 }; 
@@ -160,11 +160,11 @@ bool Snake::hasFuckedUp()
 	return false;
 }
 
-bool Snake::hasEaten(Location foodLocation)
+bool Snake::hasEaten(Food food)
 {
-	if (testCollision(foodLocation))
+	if (testCollision(food.getLocation()))
 	{
-		body.insert(body.begin(), foodLocation);
+		body.insert(body.begin(), food.getLocation());
 
 		return true;
 	}

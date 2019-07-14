@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Keyboard.h"
 #include "Colors.h"
+#include "Food.h"
 #include <vector>
 
 enum Direction {up, left, down, right};
@@ -28,6 +29,6 @@ public:
 	bool move();
 	void draw(Graphics& gfx);
 
-	bool hasEaten(Location foodLocation);
+	bool hasEaten(Food food);
 	bool isOverlapping(Location foodLocation);
 };

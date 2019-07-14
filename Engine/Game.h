@@ -51,5 +51,6 @@ private:
 
 	bool isStarted = false;
 	bool isGameOver = false;
+	bool isPaused = false;
 	/********************************/
 };

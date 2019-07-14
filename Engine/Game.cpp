@@ -40,27 +40,40 @@ void Game::UpdateModel()
 {
 	if (isStarted && !isGameOver)
 	{
-		snake.getInput(wnd.kbd);
-
-		if (moveRateCounter == 0)
+		while (!wnd.kbd.KeyIsEmpty()) //con 'if' sembra funzionare allo stesso identico modo
 		{
-			if (snake.hasEaten(food.getLocation()))
+			const Keyboard::Event e = wnd.kbd.ReadKey();
+			if (e.IsRelease() && (e.GetCode() == VK_SPACE || e.GetCode() == 'P'))
 			{
-				snake.draw(gfx); //altrimenti se dopo aver mangiato fuckdappa, non si vede che ha mangiato (quindi neanche che fuckdappa)
-
-				do
-				{
-					food.setPosition();
-				} 
-				while (snake.isOverlapping(food.getLocation()));
+				isPaused = !isPaused;
 			}
-			//else snake.move(); // GOD MODE
-			else if (!snake.move()) isGameOver = true;
 		}
 
-		moveRateCounter++;
-		if (moveRateCounter > Snake::moveRate)
-			moveRateCounter = 0;
+		if (!isPaused) 
+		{
+			snake.getInput(wnd.kbd);
+
+			if (moveRateCounter == 0)
+			{
+				if (snake.hasEaten(food))
+				{
+					snake.draw(gfx); //altrimenti se dopo aver mangiato fuckdappa, non si vede che ha mangiato (quindi neanche che fuckdappa)
+
+					do
+					{
+						food.setPosition();
+					} 
+					while (snake.isOverlapping(food.getLocation()));
+				}
+				//else snake.move(); // GOD MODE
+				else if (!snake.move()) 
+					isGameOver = true;
+			}
+
+			moveRateCounter++;
+			if (moveRateCounter > Snake::moveRate)
+				moveRateCounter = 0;
+		}
 	}
 	else if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
