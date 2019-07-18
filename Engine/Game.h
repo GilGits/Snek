@@ -28,6 +28,7 @@
 #include "SpriteCodex.h"
 #include "Sound.h"
 #include "SoundEffect.h"
+#include "FrameTimer.h"
 
 class Game
 {
@@ -47,9 +48,10 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	FrameTimer ft;
 	Snake snake;
 	Food food;
-	int moveRateCounter = 0;
+	float moveRateCounter = 0.0f;
 	std::random_device rd;
 	std::mt19937 rng;
 

@@ -75,9 +75,10 @@ void Game::UpdateModel()
 
 		if (!isPaused) 
 		{
+			const float dt = ft.Mark();
 			snake.getInput(wnd.kbd);
 
-			if (moveRateCounter == 0)
+			if (moveRateCounter == 0.0f)
 			{
 				if (snake.hasEaten(food))
 				{
@@ -98,9 +99,9 @@ void Game::UpdateModel()
 				}
 			}
 
-			moveRateCounter++;
+			moveRateCounter += dt*60.0f;
 			if (moveRateCounter > Snake::moveRate)
-				moveRateCounter = 0;
+				moveRateCounter = 0.0f;
 		}
 	}
 	else if (wnd.kbd.KeyIsPressed(VK_RETURN))
