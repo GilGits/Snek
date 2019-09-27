@@ -11,7 +11,7 @@
 class Snake
 {
 private:
-	enum class Direction { Up, Left, Down, Right };
+	enum class Direction : char { Up, Left, Down, Right };  //char to save memory lol
 	std::vector<Location> body;
 	Direction direction = Direction::Right;
 	Color color = Colors::Green;
