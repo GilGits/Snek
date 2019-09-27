@@ -6,13 +6,14 @@
 #include "Food.h"
 #include <vector>
 
-enum Direction {up, left, down, right};
+
 
 class Snake
 {
 private:
+	enum class Direction { Up, Left, Down, Right };
 	std::vector<Location> body;
-	Direction direction = up;
+	Direction direction = Direction::Right;
 	Color color = Colors::Green;
 	bool hasChosen = false;
 	int eatenBody = 0;
